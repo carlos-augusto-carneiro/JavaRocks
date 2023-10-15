@@ -1,15 +1,25 @@
-FROM ubuntu:latest AS build
+# Etapa 1: Preparação
+FROM ubuntu:latest AS preparation
 
+# Instale as ferramentas necessárias
 RUN apt-get update
-RUN apt-get install openjdk-20.0.2-jdk -y
+RUN apt-get install -y openjdk-20.0.2-jdk maven
 
+# Copie o código-fonte para o contêiner
+WORKDIR /app
 COPY . .
 
-RUN apt-get install maven -y
+# Construa o aplicativo
 RUN mvn clean install
 
+# Etapa 2: Construção da Imagem do Aplicativo
+FROM openjdk:20.0.2-jdk
+
+# Copie o artefato do build anterior
+COPY --from=preparation /app/target/todolist-1.0.0.jar app.jar
+
+# Exponha a porta necessária
 EXPOSE 8080
 
-COPY --from=build /target/todolist-1.0.0.jar app.jar
-
-ENTRYPOINT [ "java", "-jar", "app.jar" ]
+# Comando de inicialização do aplicativo
+CMD ["java", "-jar", "app.jar"]
