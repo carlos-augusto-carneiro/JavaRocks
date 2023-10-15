@@ -3,7 +3,7 @@ FROM ubuntu:latest AS preparation
 
 # Instale as ferramentas necessárias
 RUN apt-get update
-RUN apt-get install -y openjdk-20.0.2-jdk maven
+RUN apt-get install -y openjdk-18-jdk maven
 
 # Copie o código-fonte para o contêiner
 COPY . .
