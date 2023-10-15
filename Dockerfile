@@ -6,14 +6,14 @@ RUN apt-get update
 RUN apt-get install -y openjdk-20.0.2-jdk maven
 
 # Copie o código-fonte para o contêiner
-WORKDIR /app
 COPY . .
 
 # Construa o aplicativo
+RUN apt-get install maven -y
 RUN mvn clean install
 
 # Etapa 2: Construção da Imagem do Aplicativo
-FROM adoptopenjdk/openjdk17:latest
+FROM openjdk:18-jdk-slim
 
 # Copie o artefato do build anterior
 COPY --from=preparation /app/target/todolist-1.0.0.jar app.jar
@@ -23,3 +23,5 @@ EXPOSE 8080
 
 # Comando de inicialização do aplicativo
 CMD ["java", "-jar", "app.jar"]
+
+
