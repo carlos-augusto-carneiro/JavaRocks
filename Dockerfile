@@ -13,7 +13,7 @@ COPY . .
 RUN mvn clean install
 
 # Etapa 2: Construção da Imagem do Aplicativo
-FROM openjdk:20.0.2-jdk
+FROM adoptopenjdk/openjdk17:latest
 
 # Copie o artefato do build anterior
 COPY --from=preparation /app/target/todolist-1.0.0.jar app.jar
